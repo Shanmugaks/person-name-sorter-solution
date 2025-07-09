@@ -1,0 +1,7 @@
+language: csharp
+mono: none
+dotnet: 9.0.100
+script:
+  - dotnet restore
+  - dotnet build --configuration Release
+  - dotnet test --no-build --verbosity normal
