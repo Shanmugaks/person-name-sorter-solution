@@ -41,7 +41,7 @@
 ### Prerequisites
 
 - [.NET 9 SDK](https://dotnet.microsoft.com/download)
-- IDE like Visual Studio 2022 or Rider (or just a terminal)
+- IDE like Visual Studio 2022  or VS code (or just a terminal)
 
 ---
 
