@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.IO;
 using PersonNameSorter.Interfaces;
 using PersonNameSorter.Models;
+using Serilog;
 
 namespace PersonNameSorter.Strategies.Write
 {
@@ -16,6 +17,7 @@ namespace PersonNameSorter.Strategies.Write
         public void Write(List<PersonName> names)
         {
             File.WriteAllLines(_filePath, names.ConvertAll(n => n.ToString()));
+            Log.Information("Names written to file: {FilePath}", _filePath);
         }
     }
 }

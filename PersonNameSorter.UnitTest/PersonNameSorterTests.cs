@@ -7,6 +7,7 @@ using PersonNameSorter.Strategies.Sort;
 using PersonNameSorter.Strategies.Write;
 using PersonNameSorter.Factories;
 using PersonNameSorter.Processors;
+using Microsoft.Extensions.Logging.Abstractions;
 
 namespace PersonNameSorter.Tests
 {
@@ -25,7 +26,7 @@ namespace PersonNameSorter.Tests
         public void PersonNameValidator_ShouldNotThrow_OnValidName()
         {
             var validator = new PersonNameValidator();
-            var names = new List<PersonName> { new PersonName { GivenNames = new() { "Alice" }, LastName = "Smith" } };
+            var names = new List<PersonName> { new PersonName { GivenNames = new() { "Michael" }, LastName = "Jackson" } };
             validator.Validate(names);
         }
 
@@ -35,12 +36,12 @@ namespace PersonNameSorter.Tests
             var strategy = new LinqSortStrategy();
             var names = new List<PersonName>
             {
-                new() { GivenNames = new() { "John" }, LastName = "Zebra" },
-                new() { GivenNames = new() { "Alice" }, LastName = "Apple" }
+                new() { GivenNames = new() { "Jerry" }, LastName = "Max" },
+                new() { GivenNames = new() { "Vinodh" }, LastName = "Khatte" }
             };
             var result = strategy.Sort(names);
-            Assert.AreEqual("Alice Apple", result[0].ToString());
-            Assert.AreEqual("John Zebra", result[1].ToString());
+            Assert.AreEqual("Vinodh Khatte", result[0].ToString());
+            Assert.AreEqual("Jerry Max", result[1].ToString());
         }
 
         [TestMethod]
@@ -50,10 +51,10 @@ namespace PersonNameSorter.Tests
             var names = new List<PersonName>
             {
                 new() { GivenNames = new() { "Bob" }, LastName = "Taylor" },
-                new() { GivenNames = new() { "Anna" }, LastName = "Brown" }
+                new() { GivenNames = new() { "Dennis" }, LastName = "Richie" }
             };
             var result = strategy.Sort(names);
-            Assert.AreEqual("Anna Brown", result[0].ToString());
+            Assert.AreEqual("Dennis Richie", result[0].ToString());
         }
 
         [TestMethod]
@@ -62,11 +63,11 @@ namespace PersonNameSorter.Tests
             var strategy = new ParallelLinqStrategy();
             var names = new List<PersonName>
             {
-                new() { GivenNames = new() { "David" }, LastName = "Young" },
-                new() { GivenNames = new() { "Carol" }, LastName = "Anderson" }
+                new() { GivenNames = new() { "David" }, LastName = "Boom" },
+                new() { GivenNames = new() { "Allan" }, LastName = "Border" }
             };
             var result = strategy.Sort(names);
-            Assert.AreEqual("Carol Anderson", result[0].ToString());
+            Assert.AreEqual("David Boom", result[0].ToString());
         }
 
         [TestMethod]
@@ -110,7 +111,7 @@ namespace PersonNameSorter.Tests
         public void PersonNameSortProcessor_ShouldProcess_Successfully()
         {
             string input = "input.txt", output = "output.txt";
-            File.WriteAllLines(input, new[] { "Anna Smith", "John Zebra" });
+            File.WriteAllLines(input, new[] { "Sachin Tendulkar", "Johnny Zohar" });
 
             var processor = new PersonNameSortProcessor(
                 new PersonNameValidator(),
@@ -118,7 +119,8 @@ namespace PersonNameSorter.Tests
                 new List<PersonNameSorter.Interfaces.IWriteStrategy>
                 {
                     new WriteToFileStrategy(output)
-                }
+                },
+                NullLogger<PersonNameSortProcessor>.Instance
             );
 
             processor.Process(input);
@@ -136,13 +138,14 @@ namespace PersonNameSorter.Tests
                 new List<PersonNameSorter.Interfaces.IWriteStrategy>
                 {
                     new WriteToConsoleStrategy()
-                }
+                },
+                NullLogger<PersonNameSortProcessor>.Instance
             );
             string path = "complex.txt";
             File.WriteAllLines(path, new[] {
-                "Anna Marie Brown",
-                "John David Smith",
-                "Anna Brown"
+                "Algiya Thamil Magal",
+                "Cherra Chola pandiya",
+                "Jordan Michael"
             });
 
             processor.Process(path);
@@ -221,7 +224,8 @@ namespace PersonNameSorter.Tests
                 new List<PersonNameSorter.Interfaces.IWriteStrategy>
                 {
                     new WriteToFileStrategy("empty-out.txt")
-                });
+                }, 
+                NullLogger<PersonNameSortProcessor>.Instance);
             processor.Process(path);
             Assert.IsTrue(File.Exists("empty-out.txt"));
             File.Delete(path);

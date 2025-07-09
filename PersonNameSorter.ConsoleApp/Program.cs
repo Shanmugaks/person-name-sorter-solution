@@ -1,52 +1,65 @@
-using System;
-using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using PersonNameSorter.Factories;
 using PersonNameSorter.Interfaces;
 using PersonNameSorter.Processors;
+using PersonNameSorter.Strategies.Sort;
+using PersonNameSorter.Strategies.Write;
 using PersonNameSorter.Validators;
+using Serilog;
 
-namespace PersonNameSorter.ConsoleApp
+namespace PersonNameSorter
 {
-    class Program
+    internal class Program
     {
         static void Main(string[] args)
         {
-            // Validate args
             if (args.Length == 0)
             {
                 Console.WriteLine("Usage: name-sorter <input-file-path>");
                 return;
             }
 
-            string inputFilePath = args[0];
+            string inputPath = args[0];
 
-            // Instantiate dependencies
-            IPersonNameValidator validator = new PersonNameValidator();
-            ISortStrategyFactory sortFactory = new SortStrategyFactory();
-            IWriteStrategyFactory writeFactory = new WriteStrategyFactory();
-
-            ISortStrategy sortStrategy = sortFactory.Create("parallel");
-            List<IWriteStrategy> writeStrategies = new()
-            {
-                writeFactory.Create("console"),
-                writeFactory.Create("file", "sorted-names-list.txt")
-            };
-
-            // Create processor
-            IPersonNameSortProcessor processor = new PersonNameSortProcessor(
-                validator,
-                sortStrategy,
-                writeStrategies
-            );
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Debug()
+                .WriteTo.Console()
+                .WriteTo.File("PersonNameSorter.txt", rollingInterval: RollingInterval.Day)
+                .CreateLogger();
 
             try
             {
-                processor.Process(inputFilePath);
-                Console.WriteLine("\nSorted names written to screen and to 'sorted-names-list.txt'");
+                var serviceProvider = new ServiceCollection()
+                    .AddLogging(builder =>
+                    {
+                        builder.ClearProviders();
+                        builder.AddSerilog();
+                    })
+                    .AddSingleton<IPersonNameValidator, PersonNameValidator>()
+                    .AddSingleton<ISortStrategyFactory, SortStrategyFactory>()
+                    .AddSingleton<IWriteStrategyFactory, WriteStrategyFactory>()
+                    .BuildServiceProvider();
+
+                var logger = serviceProvider.GetRequiredService<ILogger<PersonNameSortProcessor>>();
+                var validator = serviceProvider.GetRequiredService<IPersonNameValidator>();
+                var sortStrategy = new LinqSortStrategy();
+                var writeStrategies = new List<IWriteStrategy>
+                {
+                    new WriteToConsoleStrategy(),
+                    new WriteToFileStrategy("sorted-names-list.txt")
+                };
+
+                var processor = new PersonNameSortProcessor(validator, sortStrategy, writeStrategies, logger);
+                processor.Process(inputPath);
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error: {ex.Message}");
+                Log.Error(ex, "An error occurred while processing names.");
+            }
+            finally
+            {
+                Log.CloseAndFlush();
             }
         }
     }

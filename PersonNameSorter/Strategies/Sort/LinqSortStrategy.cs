@@ -9,7 +9,10 @@ namespace PersonNameSorter.Strategies.Sort
     {
         public List<PersonName> Sort(List<PersonName> names)
         {
-            return names.OrderBy(n => n.LastName).ThenBy(n => string.Join(" ", n.GivenNames)).ToList();
+            return names.
+                OrderBy(n => n.LastName).
+                ThenBy(n => string.Join(" ", n.GivenNames)).
+                ToList();
         }
     }
 }
