@@ -1,5 +1,11 @@
 using System.Collections.Generic;
 
+/// <summary>
+/// Model class representing a person's name with given names and last name.
+/// </summary>
+/// <remarks>
+/// Follows basic data encapsulation (SRP).
+/// </remarks>
 namespace PersonNameSorter.Models
 {
     public class PersonName
