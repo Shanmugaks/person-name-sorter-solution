@@ -1,21 +1,11 @@
 Hello,
  I'm Shan. This solution & documentation was created with care and a focus on continuous improvement. While not perfect, it's built to grow and get better over time.
 
-👉 Preview this markdown file at: https://markdownlivepreview.com/
-
+👉 UML diagrams are vailable in /docs folder at the root
 
 # PersonNameSorter
 
 **PersonNameSorter** is a robust and extensible .NET console application designed to efficiently sort lists of names. It reads unsorted names from a file, validates them, sorts them by last name (then by given names), and outputs the results to various formats (Console and file). Built with a modular architecture, PersonNameSorter emphasizes clean code, testability, and extensibility, making it easy to adapt to new requirements.
-
-## 🚀 Get Started
-
-### Prerequisites
-
-To run PersonNameSorter, you'll need:
-
-* **[.NET 9 SDK](https://dotnet.microsoft.com/download)**
-* An IDE like **Visual Studio 2022** (or simply a terminal)
 
 ## 🛠️ Single Command to Build, Test & Run
 
