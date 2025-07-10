@@ -7,10 +7,6 @@ using PersonNameSorter.Processors;
 using PersonNameSorter.Strategies.Sort;
 using PersonNameSorter.Strategies.Write;
 using PersonNameSorter.Validators;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Threading;
 
 namespace PersonNameSorter.Tests
 {

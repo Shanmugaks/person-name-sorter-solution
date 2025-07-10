@@ -1,6 +1,12 @@
 ## VS Code
 .vscode/
 
+# Ignore all sorted output files
+sorted-names-list.txt
+
+# Ignore all log files matching PersonNameSorterYYYYMMDD.txt
+PersonNameSorter*.txt
+
 ## Visual Studio
 .vs/
 *.sln.opt

@@ -1,119 +1,173 @@
-## 🧩 Architecture Diagram
+Hello,
+ I'm Shan. This solution & documentation was created with care and a focus on continuous improvement. While not perfect, it's built to grow and get better over time.
 
-<p align="center">
-  <img src="/docs/overview.png" alt="Architecture Diagram" width="600">
-</p>
-
-
-## 🧩 Class Relationship Diagram
-
-<p align="center">
-  <img src="/docs/sequence_diagram.png" alt="Architecture Diagram" width="600">
-</p>
-
-## 🧩 Architecture Diagram
-
-<p align="center">
-  <img src="/docs/class_realtionship_diagram.png" alt="Architecture Diagram" width="600">
-</p>
+👉 Preview this markdown file at: https://markdownlivepreview.com/
 
 
 # PersonNameSorter
 
-**PersonNameSorter** is a modular, extensible .NET console application that reads a list of unsorted names from a file, validates and sorts them by last name (and then given names), and writes the results to various output formats (console and file).
+**PersonNameSorter** is a robust and extensible .NET console application designed to efficiently sort lists of names. It reads unsorted names from a file, validates them, sorts them by last name (then by given names), and outputs the results to various formats (Console and file). Built with a modular architecture, PersonNameSorter emphasizes clean code, testability, and extensibility, making it easy to adapt to new requirements.
 
-## ✨ Features
-
-- Sorts names by **last name**, then **given names**
-- Supports multiple input formats (plain text currently)
-- Modular architecture with:
-  - Strategy Pattern for sorting and writing
-  - Validator for name structure
-  - Factory for strategy instantiation
-- Clean and testable code
-- Serilog-based logging (file output)
-- Unit tested using MSTest and FluentAssertions
-
----
-
-## 🛠️ Setup
+## 🚀 Get Started
 
 ### Prerequisites
 
-- [.NET 9 SDK](https://dotnet.microsoft.com/download)
-- IDE like Visual Studio 2022 or Rider (or just a terminal)
+To run PersonNameSorter, you'll need:
 
----
+* **[.NET 9 SDK](https://dotnet.microsoft.com/download)**
+* An IDE like **Visual Studio 2022** (or simply a terminal)
 
-## 🚀 How to Run
+## 🛠️ Single Command to Build, Test & Run
 
-### Build the project
+The **`build-test-run.sh`** script is your all-in-one utility to:
 
-```bash
-dotnet build
-```
-
-### Run the console application
-
-```bash
-dotnet run --project PersonNameSorter.ConsoleApp <input-file-path>
-```
-
-> Example:
+- Restore dependencies  
+- Build the project  
+- Run unit tests  
+- Execute the application with your selected dataset
 
 ```bash
-dotnet run --project PersonNameSorter.ConsoleApp .\data\unsorted-names-list.txt
+./build-test-run.sh [size]
 ```
 
-### Output
+### Optional Size Arguments
 
-- Sorted names will be written to:
-  - Console output
-  - A file named `sorted-names-list.txt` in the same directory
+| Argument | Description               | Input File                             |
+|----------|---------------------------|-----------------------------------------|
+| (none)   | Default input file        | `./data/unsorted-names-list.txt`        |
+| 2K       | 2,000 names               | `./data/unsorted-names-list-2K.txt`     |
+| 5K       | 5,000 names               | `./data/unsorted-names-list-5K.txt`     |
+| 10K      | 10,000 names              | `./data/unsorted-names-list-10K.txt`    |
+| 100K     | 100,000 names             | `./data/unsorted-names-list-100K.txt`   |
+| 1M       | 1 million names           | `./data/unsorted-names-list-1M.txt`     |
 
----
+### Example Commands
 
-## ✅ How to Test
+```bash
+./build-test-run.sh         # Uses default input file
+./build-test-run.sh 5K      # Uses 5,000 names input
+./build-test-run.sh 1M      # Uses 1 million names input
+```
+
+Make sure the script is executable:
+> ```bash
+> chmod +x build-test-run.sh
+> ```
+
+## 📤 Output
+
+- Console output of sorted names
+- File output: `sorted-names-list.txt`
+- Logs with Serilog: `PersonNameSorterYYYYMMDD.txt`
+
+
+## ✅ Testing
+
+Run tests independently:
 
 ```bash
 dotnet test
 ```
 
-### Test Coverage Includes:
+### Test Coverage
 
-- Name validation rules (e.g., required last name, allowed name count)
-- Sorting strategies (LINQ, Parallel LINQ)
-- Output strategies (console, file)
-- End-to-end processor scenarios (e.g., trimming, blank lines, malformed inputs)
+- ✔️ Name validation (missing last names, blank inputs)
+- ✔️ Sorting strategies (LINQ, Parallel LINQ)
+- ✔️ Output strategies (Console, File)
+- ✔️ Full pipeline processor test cases
 
----
+<p align="center">
+  <img src="/docs/test_result.png" alt="MS test result" width="100%">
+</p>
 
-## 📁 Project Structure
+
+## ✨ Features
+
+PersonNameSorter offers a powerful set of features designed for flexibility and reliability:
+
+* **Intelligent Sorting:** Sorts names primarily by last name, then by given names for precise ordering.
+* **Flexible Input:** Currently supports plain text input files, with easy extensibility for other formats.
+* **Efficient & Scalable Sorting:** Employs simple LINQ-based sorting for smaller datasets and parallel-enabled LINQ sorting for larger files.
+* **Modular Architecture:** DLL-based design with Strategy and Factory patterns for extensibility.
+* **Clean and Testable Code:** Adheres to best practices for maintainability and ease of testing.
+* **Comprehensive Logging:** Integrates Serilog for robust logging.
+* **Automated Testing**: Unit tested using MSTest and FluentAssertions.
+
+## 🛠️ Design and Structure
+
+### Architectural Overview
+Below diagram illustrates the high-level components and their interactions within the application.
+<p align="center">
+  <img src="/docs/overview.png" alt="Architecture Diagram" width="600">
+</p>
+
+### Key Relationships
+Below diagram provides a detailed view of how different classes interact, highlighting the dependencies and collaborations that form the application's core logic.
+<p align="center">
+  <img src="/docs/class_realtionship_diagram.png" alt="Class Relationship Diagram" width="100%">
+</p>
+
+### Execution Flow
+Below **Sequence Diagram** visualizes the dynamic behavior of the application, showing the order of operations and interactions between objects when processing names.
+<p align="center">
+  <img src="/docs/sequence_diagram.png" alt="Sequence Diagram" width="100%">
+</p>
+
+### Project Structure
 
 ```
-PersonNameSorter/
-├── Interfaces/           # Core interfaces for validator, sorter, writer
-├── Models/               # PersonName model
-├── Processors/           # Core logic for reading, validating, sorting, writing
-├── Strategies/           # Sorting and output strategy implementations
-├── Factories/            # Factory pattern for dynamic strategy selection
-├── Extensions/           # DI setup
-├── Program.cs            # Entry point
-├── PersonNameSorter.csproj
-└── README.md
+📁 PersonNameSorter.Solution/
+├── 📁 PersonNameSorter/                    → Core Sorting Library (DLL)
+│ ├── 📁 Interfaces/                        → Contracts for validator, sorter, and writer
+│ ├── 📁 Models/                            → PersonName data model
+│ ├── 📁 Processors/                        → Orchestrates the sorting pipeline
+│ ├── 📁 Strategies/
+│ │ ├── 📁 Sort/                            → Sorting strategies (Linq, MergeSort, PLINQ)
+│ │ └── 📁 Write/                           → Output strategies (TXT, CSV, JSON)
+│ ├── 📁 Factories/                         → Factory classes for dynamic strategy resolution
+│ ├── 📁 Extensions/                        → DI container extensions
+│ └── 🧿 PersonNameSorter.csproj            → Project file for core library
+│
+├── 📁 PersonNameSorter.Console/            → Console application (EXE)
+│ ├── 📄 Program.cs                         → Main entry point for running the sorter
+│ └── 🧿 PersonNameSorter.Console.csproj    → Project file for console app
+│
+├── 📁 PersonNameSorter.UnitTest/           → Unit test project using MSTest
+│ ├── 📄 PersonNameSorterTests.cs           → Tests for validation, sorting, and output logic
+│ └── 🧿 PersonNameSorter.UnitTest.csproj   → Project file for unit tests
+│
+├── ⚙️ .gitignore                           → Specifies ignored files for Git
+├── 🔄 .travis.yml                          → Travis CI/CD pipeline
+├── 🔧 build-test-run.sh                    → Single shell script to restore, build, test and run
+├── 🐳 Dockerfile                           → Docker config for local container deployment
+├── 🧿 PersonNameSorter.Solution.sln        → Visual Studio solution file linking all projects
+└── 📘 README.md                            → Documentation for this whole solution
+├── 📁 data/                                → all sample datasets - 11(default), 2K, 5K, 10K, 100K, 1M
+├── 📁 docs/                                → all images + UML diagrams (generated using plantUML) for the readme.md
 ```
 
----
+
+## 🔄 CI/CD Integration
+
+Supports build automation on local and cloud environments:
+
+- **.travis.yml**: Travis CI configuration for automated build/test
+- **build-test-run.sh**: Runs entire flow with one command
+- **Dockerfile**: Containerized execution on any platform
+
+These tools ensure consistent quality, test automation, and seamless build validation across environments.
+
+
 
 ## 📋 Strategy Options
 
 ### Sorting Strategies
 
-| Strategy Type | Description               |
-|---------------|---------------------------|
-| LINQ          | Basic sequential sorting  |
+| Strategy Type | Description |
+|---------------|-------------|
+| LINQ          | Basic sequential sorting |
 | Parallel      | Optimized for parallel sorting using PLINQ |
-| MergeSort     | (Future) Custom merge sort for big data sets - TODO|
+| MergeSort     | (Future) Custom merge sort for big data sets - TO DO|
 
 ### Writing Strategies
 
@@ -122,28 +176,12 @@ PersonNameSorter/
 | Console       | Outputs to console |
 | File          | Writes to `sorted-names-list.txt` (default) |
 
----
-
-## 📌 Notes
-
-- Logging is configured using **Serilog**. Logs are written to `PersonNameSorter.txt` by default.
-- Invalid lines (e.g., empty lines, too many or too few name parts) are gracefully skipped.
-- You can extend this to support CSV or JSON input/output with minimal changes due to its pluggable design.
 
 
-
----
-
-## 🧠 Future Enhancements
+## 🧠 Future Improvements
 
 - Support for CSV and JSON input/output
 - CLI arguments for choosing strategy types
 - Integration with a web front-end + Api
 - Multi-language support
 - Implementation of Merge sort for large data
-
----
-
-## 👨‍💻 Author
-
-**Shan KS**  
