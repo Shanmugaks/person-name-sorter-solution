@@ -1,7 +1,8 @@
-Hello,
- I'm Shan. This solution & documentation was created with care and a focus on continuous improvement. While not perfect, it's built to grow and get better over time.
+Hello, 
 
-👉 UML diagrams are vailable in /docs folder at the root
+I'm Shan. This solution and documentation were created with care and a focus on continuous improvement. While not perfect, it's built to grow and improve over time.
+
+👉 UML diagrams are available in the /docs folder at the project root.
 
 # PersonNameSorter
 
