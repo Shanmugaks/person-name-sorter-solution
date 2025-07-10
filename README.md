@@ -18,7 +18,7 @@ The **`build-test-run.sh`** script is your all-in-one utility to:
 - Execute the application with your selected dataset
 
 ```bash
-./build-test-run.sh [size]
+sh ./build-test-run.sh [size]
 ```
 
 ### Optional Size Arguments
@@ -35,9 +35,9 @@ The **`build-test-run.sh`** script is your all-in-one utility to:
 ### Example Commands
 
 ```bash
-./build-test-run.sh         # Uses default input file
-./build-test-run.sh 5K      # Uses 5,000 names input
-./build-test-run.sh 1M      # Uses 1 million names input
+sh ./build-test-run.sh         # Uses default input file
+sh ./build-test-run.sh 5K      # Uses 5,000 names input
+sh ./build-test-run.sh 1M      # Uses 1 million names input
 ```
 
 Make sure the script is executable:
